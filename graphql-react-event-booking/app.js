@@ -2,7 +2,7 @@ const app = require("express")()
 const bodyParser = require("body-parser")
 const graphQlHttp = require("express-graphql")
 const { buildSchema } = require("graphql")
-
+const mongoose = require("mongoose")
 app.use(bodyParser.json())
 
 const events = [];
@@ -53,4 +53,7 @@ app.use('/graphql', graphQlHttp({
     graphiql: true
 }))
 
-app.listen(3000, () => console.log('Event booking server listening on port 3000'))
+mongoose
+.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-ujyk4.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(()=> app.listen(3000, () => console.log('Event booking server listening on port 3000')))
+.catch(err => console.log(err))
