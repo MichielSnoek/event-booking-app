@@ -33,7 +33,7 @@ const user = async userId =>{
 module.exports = {
     events: async () => {
         try{
-            const events = Event.find()
+            const events = await Event.find()
            console.log(events)
             return events.map(event =>{
                 const {_id, title, description, date, price, creator} = event._doc
