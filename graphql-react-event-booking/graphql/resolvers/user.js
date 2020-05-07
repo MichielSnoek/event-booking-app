@@ -32,7 +32,7 @@ module.exports = {
                 throw new Error('Password is incorrect')
             }
             const token = jwt.sign({userId: user.id, email: user.email},'hashingtoken', {
-                expiresIn: '1h'
+                expiresIn: '1h' // keep them short-lived in case they get stolen
             })
             return { userId: user.id, token, tokenExpiration: 1}
         }
