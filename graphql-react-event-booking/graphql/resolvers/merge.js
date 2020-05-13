@@ -56,7 +56,10 @@ const transformBooking = booking => {
         updatedAt: dateToString(updatedAt)
     }
 }
-
+if(props.match === null){
+    return(<div>Select a country</div>)
+}
+return(<div><h1>{country.name}</h1></div>)
 module.exports = { 
                 transformBooking,
                 transformEvent
