@@ -14,31 +14,40 @@
     margin: 0;
     font-size: 1.5rem;
 }
-.main-naivgation_items {
+.main-navigation_items {
     margin: 1.5rem;
    
     
 }
-.main-naivgation_items ul {
+.main-navigation_items ul {
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     list-style: none;
 }
 
-.main-naivgation_items li{
+.main-navigation_items li{
     margin: 0 1rem;
 }
 
-.main-naivgation_items a {
+.main-navigation_items a,
+.main-navigation_items button {
     text-decoration: none;
     color: orange;
+    border: none;
+    font: inherit;
+    background: transparent;
+    cursor: pointer;
 }
 
-.main-naivgation_items a:hover,
-.main-naivgation_items a:active,
-.main-naivgation_items a.active
+.main-navigation_items a:hover,
+.main-navigation_items a:active,
+.main-navigation_items a.active,
+.main-navigation_items button:hover,
+.main-navigation_items button:active
 {
     color: black;
+    border-radius: 5px;
 }
