@@ -1,5 +1,6 @@
 // sets extra data on the request depending on if we are or not authenticated
 const jwt = require("jsonwebtoken")
+
 module.exports = (req,res,next) => {
     const authHeader = req.get('Authorization')
     if(!authHeader){

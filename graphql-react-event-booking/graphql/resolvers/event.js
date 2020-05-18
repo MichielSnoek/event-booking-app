@@ -18,6 +18,7 @@ module.exports = {
         if(!req.isAuth){// protection for resolvers
             throw new Error("Unauthenticated request")    
         }
+        
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,

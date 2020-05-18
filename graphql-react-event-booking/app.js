@@ -8,6 +8,7 @@ const graphqlResolvers = require("./graphql/resolvers/index")
 const isAuth = require("./middleware/is-auth")
 
 // app.use(cors())
+app.use(isAuth)// runs on every incoming request
 app.use(bodyParser.json())
 app.use((req, res, next) =>{
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -19,7 +20,6 @@ app.use((req, res, next) =>{
 
     return next()
 })
-app.use(isAuth)// runs on every incoming request
 app.use('/graphql', graphQlHttp({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
