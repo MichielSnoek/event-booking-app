@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
+import EventList from '../components/EventList/EventList'
 import Modal from '../components/Modal/Modal'
 import Backdrop from '../components/Backdrop/Backdrop'
+import Spinner from '../components/Spinner/Spinner'
 import AuthContext from '../context/auth-context'
 import './Events.css'
 
 export default class EventsPage extends Component {
     state = {
         eventsList: [],
-        creating: false
+        creating: false,
+        isLoading: false
     }
     static contextType = AuthContext
 
@@ -78,38 +81,45 @@ export default class EventsPage extends Component {
     }
 
     fetchEvents = () => {
-    let requestBody = {
-            query: `
-                query {
-                    events {
-                        title
-                        description
-                        price
-                        date
-                        creator {
-                            _id
-                            email
-                        }
-                    }
-                }`
-        }
+        this.setState({isLoading: true});
 
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers:{
-                'Content-Type':'application/json'
+        let requestBody = {
+                query: `
+                    query {
+                        events {
+                            _id
+                            title
+                            description
+                            price
+                            date
+                            creator {
+                                _id
+                                email
+                            }
+                        }
+                    }`
             }
-        })
-        .then(res => {
-            if(res.status !== 200){
-                throw new Error('Failed')
-            }
-            return res.json()
-        })
-        .then(resData => {
-            this.setState({eventsList: resData.data.events})
-        })
+
+            fetch('http://localhost:8000/graphql', {
+                method: 'POST',
+                body: JSON.stringify(requestBody),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(res => {
+                if(res.status !== 200){
+                    throw new Error('Failed')
+                }
+                return res.json()
+            })
+            .then(resData => {
+                this.setState({eventsList: resData.data.events, isLoading: false})
+            })
+            .catch(err => {
+                console.log(err)
+                this.setState({isLoading: false});
+            })
     }
     startCreateEventHandler = () => {
         this.setState({creating: true})
@@ -122,14 +132,6 @@ export default class EventsPage extends Component {
     }
 
     render() {
-        const eventList = this.state.eventsList.map((event, key) => (
-            <li className="events_list-item" key={key}>
-                <h3>{event.title}</h3>
-                <p>{event.description}</p>
-                <p>{event.price}$</p>
-                <p>{event.date}</p>
-            </li>
-        ))
         return (
             <>
                 <h1>The Events Page</h1>
@@ -158,10 +160,7 @@ export default class EventsPage extends Component {
                     </form>
                 </Modal>}
                 </div>}
-               <ul className="events_list">
-                   {this.state.eventsList ? eventList : ''}
-               </ul>
-                
+               {this.state.isLoading ? <Spinner/> : <EventList events={this.state.eventsList} isEventOwner={this.context.userId}/>} 
           
             </>
         )
