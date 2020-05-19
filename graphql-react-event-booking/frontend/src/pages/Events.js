@@ -10,7 +10,8 @@ export default class EventsPage extends Component {
     state = {
         eventsList: [],
         creating: false,
-        isLoading: false
+        isLoading: false,
+        selectedEvent: null
     }
     static contextType = AuthContext
 
@@ -128,18 +129,39 @@ export default class EventsPage extends Component {
         this.createEventHandler()
     }
     modalCancelHandler = () => {
-        this.setState({creating: false})
+        this.setState({creating: false, selectedEvent: null})
     }
+    showDetailHandler = (eventId) => {
+        this.setState(prevState => {
+            const selectedEvent = prevState.eventsList.find( e => e._id === eventId)
+            return {selectedEvent: selectedEvent}
+        })
+    }
+    bookEventHandler = () => {
 
+    }
+    
     render() {
         return (
             <>
                 <h1>The Events Page</h1>
-                {this.context.token && <div className="events-control">
+                {this.context.token && 
+                <div className="events-control">
                     <p>Share your Events!</p>
-                    <button className="btn" onClick={()=> this.startCreateEventHandler()}>Create event</button>
+                    <button 
+                    className="btn" 
+                    onClick={()=> this.startCreateEventHandler()}>
+                    Create event
+                    </button>
                     {this.state.creating && <Backdrop/>}
-                    {this.state.creating && <Modal title="Add Event" canCancel canConfirm onCancel={this.modalCancelHandler} onConfirm={this.modalConfirmHandler}>
+                    {this.state.creating && 
+                    <Modal 
+                    title="Add Event" 
+                    canCancel 
+                    canConfirm 
+                    onCancel={this.modalCancelHandler} 
+                    onConfirm={this.modalConfirmHandler}
+                    confirmText="Confirm">
                     <form>
                         <div className="form-control">
                             <label htmlFor="title">Title</label>
@@ -160,7 +182,27 @@ export default class EventsPage extends Component {
                     </form>
                 </Modal>}
                 </div>}
-               {this.state.isLoading ? <Spinner/> : <EventList events={this.state.eventsList} isEventOwner={this.context.userId}/>} 
+                { this.state.selectedEvent && <Backdrop/>}
+                {this.state.selectedEvent && 
+                <Modal 
+                title={this.state.selectedEvent.title}
+                canCancel 
+                canConfirm 
+                onCancel={this.modalCancelHandler} 
+                onConfirm={this.bookEventHandler}
+                confirmText="Book">
+                <h1>{this.state.selectedEvent.title}</h1>
+                <h2>${this.state.selectedEvent.price} - {new Date(this.state.selectedEvent.date).toLocaleDateString('de-DE')}</h2>
+                <p>{this.state.selectedEvent.description}</p>
+                </Modal>
+                }
+               {this.state.isLoading ? 
+                 <Spinner/> : 
+                 <EventList 
+                 events={this.state.eventsList} 
+                 isEventOwner={this.context.userId}
+                 onViewDetail={this.showDetailHandler}    
+                 />} 
           
             </>
         )

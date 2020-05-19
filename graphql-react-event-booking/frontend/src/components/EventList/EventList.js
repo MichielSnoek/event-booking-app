@@ -4,7 +4,12 @@ import './EventList.css'
 
 const eventsList = props => {
     const events = props.events.map((event) => (
-        <EventItem {...event} key={event._id} userId={props.isEventOwner}/>
+        <EventItem 
+        {...event} 
+        key={event._id} 
+        userId={props.isEventOwner}
+        onDetails={props.onViewDetail}    
+        />
     ));
 
    return (

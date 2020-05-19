@@ -9,11 +9,11 @@ export default function MainNavigation(props) {
             return (
                 <header className="main-navigation">
                     <div className="main-navigation_logo">
-                        <h1>The Navbar</h1>
+                        <h1>Event Booking App</h1>
                     </div>
                     <nav className="main-navigation_items">
                         <ul>
-                            {!context.token && <li><NavLink to="/auth">Auth</NavLink></li>}
+                            {!context.token && <li><NavLink to="/auth">Login</NavLink></li>}
                             <li><NavLink to="/events">Events</NavLink></li>
                             {context.token && 
                             <>

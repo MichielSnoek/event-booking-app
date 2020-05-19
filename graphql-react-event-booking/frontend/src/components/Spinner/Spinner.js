@@ -3,8 +3,8 @@ import './Spinner.css'
 
 const spinner = (props) => {
     return (
-        <div className="lds-hourglass">
-            
+        <div className="spinner">
+            <div className="lds-hourglass"></div>
         </div>
     )
 }
