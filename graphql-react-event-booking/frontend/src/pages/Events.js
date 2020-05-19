@@ -172,6 +172,7 @@ export default class EventsPage extends Component {
         })
         .then(resData => {
             console.log(resData.data)
+            this.modalCancelHandler()
         })
         .catch(err => console.error(err))
     }
@@ -226,6 +227,7 @@ export default class EventsPage extends Component {
                 title={this.state.selectedEvent.title}
                 canCancel 
                 canConfirm 
+                isLoggedIn={this.context.token !== null}
                 onCancel={this.modalCancelHandler} 
                 onConfirm={this.bookEventHandler}
                 confirmText="Book">

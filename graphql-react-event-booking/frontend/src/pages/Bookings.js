@@ -88,7 +88,7 @@ export default class BookingsPage extends Component {
                    const updatedBookings = prevState.bookings.filter(booking => {
                        return booking._id !== bookingId
                    } )
-                   return {bookings: updatedBookings}
+                   return {bookings: updatedBookings,isLoading: false}
                })     
         })
         .catch(err => {
