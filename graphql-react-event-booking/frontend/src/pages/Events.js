@@ -13,6 +13,7 @@ export default class EventsPage extends Component {
         isLoading: false,
         selectedEvent: null
     }
+    isActive = true;
     static contextType = AuthContext
 
     constructor(props){
@@ -115,7 +116,10 @@ export default class EventsPage extends Component {
                 return res.json()
             })
             .then(resData => {
-                this.setState({eventsList: resData.data.events, isLoading: false})
+                if(this.isActive){
+                    this.setState({eventsList: resData.data.events, isLoading: false})
+                }
+                
             })
             .catch(err => {
                 console.log(err)
@@ -138,9 +142,43 @@ export default class EventsPage extends Component {
         })
     }
     bookEventHandler = () => {
+        const token = this.context.token
 
+        let requestBody = {
+            query: `
+                    mutation {
+                        bookEvent(eventId: "${this.state.selectedEvent._id}"){
+                           _id
+                           createdAt
+                           updatedAt
+                        }
+                    }`
+        }
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization' : 'Bearer ' + token
+            }
+        })
+        .then(res => {
+            if(res.status !== 200){
+                console.log(res)
+                throw new Error('Failed')
+            }
+            return res.json()
+        })
+        .then(resData => {
+            console.log(resData.data)
+        })
+        .catch(err => console.error(err))
     }
-    
+    componentWillUnmount(){
+        this.isActive = false;
+    }
+
     render() {
         return (
             <>
