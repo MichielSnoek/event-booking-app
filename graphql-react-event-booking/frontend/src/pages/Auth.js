@@ -24,8 +24,8 @@ export default class AuthPage extends Component {
         }
         let requestBody = {
             query: `
-                query Login($email: String!, $password: String){
-                    login(email: $email", password: $password){
+                query Login($email: String!, $password: String!){
+                    login(email: $email, password: $password){
                         userId
                         token
                         tokenExpiration
@@ -73,6 +73,7 @@ export default class AuthPage extends Component {
                     resData.data.login.tokenExpiration
                     )
             }
+            localStorage.setItem('user', JSON.stringify(resData.data.login))
             console.log(resData.data)
         })
         .catch(err => console.error(err))

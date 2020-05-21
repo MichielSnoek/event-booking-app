@@ -6,17 +6,22 @@ import EventsPage from './pages/Events'
 import MainNavigation from './components/Navigation/MainNavigation'
 import AuthContext from './context/auth-context'
 import './App.css';
+import AuthService from './utils/AuthService';
+
+const auth = new AuthService();
 
 export default class App extends Component {
   state = {
-    token: null,
-    userId: null
+    token: auth.getUser().token||null,
+    userId: auth.getUser().userId||null
   }
   login = (token, userId, tokenExpiration) => {
+    
     this.setState({ token, userId })
   }
 
   logout = () => {
+    localStorage.removeItem('user');
     this.setState({token: null, userId: null})
   }
 

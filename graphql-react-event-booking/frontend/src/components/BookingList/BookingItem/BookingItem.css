@@ -1,0 +1,7 @@
+.booking_item {
+    margin-top: 5px;
+    list-style: none;
+    border: 1px solid turquoise;
+    display:flex;
+    justify-content: space-around;
+}

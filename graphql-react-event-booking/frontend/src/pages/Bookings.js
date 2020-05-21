@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import Spinner from '../components/Spinner/Spinner'
 import AuthContext from '../context/auth-context'
+import BookingChart from '../components/BookingChart/BookingChart'
+import BookingControl from '../components/BookingsControl/BookingsControl'
+import BookingList from '../components/BookingList/BookingList'
 
 export default class BookingsPage extends Component {
     static contextType = AuthContext
 
     state = {
         isLoading: false,
-        bookings: []
+        bookings: [],
+        outputType: 'list'
     }
 
     componentDidMount(){
@@ -27,6 +31,7 @@ export default class BookingsPage extends Component {
                                _id
                                title
                                date
+                               price
                            }
                         }
                     }`
@@ -99,21 +104,38 @@ export default class BookingsPage extends Component {
             this.setState({isLoading: false});
         })
     }
-
+    outputTypeHandler = outputType => {
+        if(outputType === 'list'){
+            this.setState({outputType: 'list'})
+        }
+        else {
+            this.setState({outputType: 'chart'})
+        }
+    }
     render() {
-        if(this.state.isLoading){
-            return <Spinner/>
+        let content = <Spinner/>
+        if(!this.state.isLoading){
+            content = (
+                <>
+                   <BookingControl 
+                   activeOutputType={this.state.outputType} 
+                   onChange={this.outputTypeHandler}/>
+                    <div style={{textAlign: 'center'}}>
+                        {this.state.outputType === 'list' ? 
+                        <BookingList 
+                        bookings={this.state.bookings} 
+                        removeHandler={this.cancelBooking}/> :
+                        <BookingChart 
+                        bookings={this.state.bookings}/>}
+                    </div>
+                </>
+            )
         }
         return (
             <div>
                 <h1>The Bookings Page</h1>
                 <ul>
-                    {this.state.bookings.map(booking => (
-                        <li key={booking._id}> 
-                            {booking.event.title} - {new Date(booking.event.date).toLocaleDateString()} 
-                            <button onClick={()=>this.cancelBooking(booking._id)}>Cancel</button>
-                        </li>
-                    ))}
+                    {content}
                 </ul>
             </div>
         )
