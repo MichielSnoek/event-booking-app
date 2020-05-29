@@ -17,7 +17,6 @@ app.use((req, res, next) =>{
     if(req.method === 'OPTIONS') {
         return res.sendStatus(200)
     }
-
     return next()
 })
 app.use('/graphql', graphQlHttp({

@@ -15,7 +15,9 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Event'
         }
-]
+],
+profileImage: String,
+  googleId: { type: String, unique: true }
 })
 
 module.exports = mongoose.model('User', userSchema);

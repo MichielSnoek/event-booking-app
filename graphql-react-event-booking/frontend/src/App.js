@@ -4,16 +4,21 @@ import AuthPage from './pages/Auth'
 import BookingsPage from './pages/Bookings'
 import EventsPage from './pages/Events'
 import MainNavigation from './components/Navigation/MainNavigation'
+import AuthService from './utils/AuthService';
 import AuthContext from './context/auth-context'
 import './App.css';
-import AuthService from './utils/AuthService';
 
 const auth = new AuthService();
 
+let token, userId = null
+if(auth.getUser() !== null ){
+  token = auth.getUser().token
+  userId = auth.getUser().userId
+}
 export default class App extends Component {
   state = {
-    token: auth.getUser().token||null,
-    userId: auth.getUser().userId||null
+    token: token,
+    userId: userId
   }
   login = (token, userId, tokenExpiration) => {
     
